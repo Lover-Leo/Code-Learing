@@ -1,0 +1,47 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "MSVC: build active C/C++ file",
+            "type": "shell",
+            "command": "call",
+            "args": [
+                {
+                    "value": "${workspaceFolder}\\.vscode\\build-msvc.cmd",
+                    "quoting": "strong"
+                },
+                {
+                    "value": "${file}",
+                    "quoting": "strong"
+                }
+            ],
+            "options": {
+                "cwd": "${fileDirname}",
+                "shell": {
+                    "executable": "C:\\Windows\\System32\\cmd.exe",
+                    "args": [
+                        "/d",
+                        "/c"
+                    ]
+                }
+            },
+            "problemMatcher": [
+                "$msCompile"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated",
+                "clear": true,
+                "showReuseMessage": false
+            },
+            "runOptions": {
+                "reevaluateOnRerun": true
+            }
+        }
+    ]
+}
