@@ -1,0 +1,21 @@
+# C/C++ build products
+*.exe
+*.obj
+*.o
+*.pdb
+*.ilk
+*.lib
+*.dll
+
+# Build directories
+build/
+out/
+.vs/
+
+# Editor settings that are machine-specific
+.vscode/*.log
+
+# Temporary files
+*.tmp
+*.bak
+*~
