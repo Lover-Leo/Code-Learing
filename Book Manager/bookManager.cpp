@@ -331,6 +331,9 @@ int main()
             case 8:
                 countBooks(books);
                 break;
+            case 9:
+                deleteBook(books);
+                break;
             case 0:
                 std::cout << "您已成功退出系统\n";
                 saveBooks(books);
