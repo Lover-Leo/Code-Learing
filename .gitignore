@@ -6,6 +6,7 @@
 *.ilk
 *.lib
 *.dll
+*.json
 
 # Build directories
 build/
