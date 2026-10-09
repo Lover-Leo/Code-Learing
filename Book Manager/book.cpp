@@ -1,30 +1,30 @@
 #include <iostream>
 #include "book.h"
-book::book(
-    const std::string& newtitle,
-    const std::string& newid,
-    const std::string& newauther,
-    borrowstatus newstatus
+Book::Book(
+    const std::string& newTitle,
+    const std::string& newId,
+    const std::string& newAuthor,
+    BorrowStatus newStatus
 ):
-title(newtitle),id(newid),auther(newauther),status(newstatus)
+title(newTitle),id(newId),author(newAuthor),status(newStatus)
 {
 
 }
-const std::string& book::getid() const
+const std::string& Book::getId() const
 {
     return id;
 }
-const std::string& book::gettitle() const
+const std::string& Book::getTitle() const
 {
     return title;
 }
-borrowstatus book::getstatus() const
+BorrowStatus Book::getStatus() const
 {
     return status;
 }
-bool book::borrow()
+bool Book::borrow()
 {
-    if(status == borrowstatus::borrowed)
+    if(status == BorrowStatus::Borrowed)
     {
         std::cout << "未能成功借阅该图书\n";
         return false;
@@ -32,17 +32,17 @@ bool book::borrow()
     else
     {
         std::cout << "已成功借阅该图书\n";
-        status = borrowstatus::borrowed;
+        status = BorrowStatus::Borrowed;
         return true;
     }
 }
-void book::showinfo() const
+void Book::showInfo() const
 {
     std::cout << "书名:" << title << "\n";
     std::cout << "编号:" << id << "\n";
-    std::cout << "作者:" << auther << "\n";
+    std::cout << "作者:" << author << "\n";
     std::cout << "是否借出:" ;
-    if(status == borrowstatus::borrowed)
+    if(status == BorrowStatus::Borrowed)
     {
         std::cout << "已借出\n";
     }
@@ -52,13 +52,13 @@ void book::showinfo() const
     }
     std::cout << "====================\n";
 }
-const std::string& book::getauther() const
+const std::string& Book::getAuthor() const
 {
-    return auther;
+    return author;
 }
-bool book::returnbook()
+bool Book::returnBook()
 {
-    if(status == borrowstatus::available)
+    if(status == BorrowStatus::Available)
     {
         std::cout << "该图书未借出\n";
         return false;
@@ -66,7 +66,7 @@ bool book::returnbook()
     else
     {
         std::cout << "已成功归还该图书\n";
-        status = borrowstatus::available;
+        status = BorrowStatus::Available;
         return true;
     }
 }

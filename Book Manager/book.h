@@ -1,28 +1,28 @@
 #pragma once
 #include<string>
-enum class borrowstatus
+enum class BorrowStatus
 {
-    available = 0,
-    borrowed = 1
+    Available = 0,
+    Borrowed = 1
 };
-class book
+class Book
 {
     private:
         std::string id;
         std::string title;
-        std::string auther;
-        borrowstatus status;
+        std::string author;
+        BorrowStatus status;
     public:
-        book(
-            const std::string& newtitle,
-            const std::string& newid,
-            const std::string& newauther,
-            borrowstatus newstatus);
-        const std::string& getid() const;
-        const std::string& gettitle() const;
-        const std::string& getauther() const;
-        borrowstatus getstatus() const; 
-        void showinfo() const;
+        Book(
+            const std::string& newTitle,
+            const std::string& newId,
+            const std::string& newAuthor,
+            BorrowStatus newStatus);
+        const std::string& getId() const;
+        const std::string& getTitle() const;
+        const std::string& getAuthor() const;
+        BorrowStatus getStatus() const;
+        void showInfo() const;
         bool borrow();
-        bool returnbook();
+        bool returnBook();
 };

@@ -8,44 +8,44 @@
 #include<fstream>
 #include<algorithm>
 #include <cstddef>
-void addbook(std::vector<book>& books)
+void addBook(std::vector<Book>& books)
 {
-    std::string newid;
-    std::string newtitle;
-    std::string newauther;
-    borrowstatus newstatus = borrowstatus::available;
+    std::string newId;
+    std::string newTitle;
+    std::string newAuthor;
+    BorrowStatus newStatus = BorrowStatus::Available;
     std::cout << "编号:";
-    std::getline(std::cin,newid);
-    if(newid.empty())
+    std::getline(std::cin,newId);
+    if(newId.empty())
     {
         std::cout << "图书编号不能为空";
         return;
     }
     for(const auto& bo:books)
     {
-        if(newid == bo.getid())
+        if(newId == bo.getId())
         {
             std::cout << "您的图书编号与其他图书编号重复\n";
             return;
         }
     }
     std::cout << "书名:";
-    std::getline(std::cin,newtitle);
-    if(newtitle.empty())
+    std::getline(std::cin,newTitle);
+    if(newTitle.empty())
     {
         std::cout << "书名不能为空";
         return;
     }
     std::cout << "作者:";
-    std::getline(std::cin,newauther);
-    if(newauther.empty())
+    std::getline(std::cin,newAuthor);
+    if(newAuthor.empty())
     {
         std::cout << "作者不能为空";
         return;
     }
-    books.emplace_back(newtitle,newid,newauther,newstatus);
+    books.emplace_back(newTitle,newId,newAuthor,newStatus);
 }
-void showbook(const std::vector<book>& books)
+void showBooks(const std::vector<Book>& books)
 {
     if(books.empty())
     {
@@ -54,20 +54,20 @@ void showbook(const std::vector<book>& books)
     }
     for(const auto& bo: books)
     {
-        bo.showinfo();
+        bo.showInfo();
     }
 }
-book* findbook(
-    std::vector<book>& books,
-    const std::string& targetid
+Book* findBook(
+    std::vector<Book>& books,
+    const std::string& targetId
 )
 {
     auto result = std::find_if(
         books.begin(),
         books.end(),
-        [&targetid](const book& bo)
+        [&targetId](const Book& bo)
         {
-            return bo.getid() == targetid;
+            return bo.getId() == targetId;
         }
     );
     if(result == books.end())
@@ -76,17 +76,17 @@ book* findbook(
     }
     return &(*result);
 }
-void searchbook(std::vector<book>& books)
+void searchBook(std::vector<Book>& books)
 {
     if(books.empty())
     {
         std::cout << "您的系统内没有图书\n";
         return;
     }
-    std::string targetid;
+    std::string targetId;
     std::cout << "请输入您要查找的图书编号:";
-    std::getline(std::cin,targetid);
-    const book* result = findbook(books,targetid);
+    std::getline(std::cin,targetId);
+    const Book* result = findBook(books,targetId);
     if(result == nullptr)
     {
         std::cout << "图书系统内没有该图书\n";
@@ -94,22 +94,22 @@ void searchbook(std::vector<book>& books)
     }
     else
     {
-        result -> showinfo();
+        result -> showInfo();
     }
 }
 
-void borrowbook(std::vector<book>& books)
+void borrowBook(std::vector<Book>& books)
 {
     if(books.empty())
     {
         std::cout << "系统内没有图书\n";
         return;
     }
-    std::string targetid;
+    std::string targetId;
     std::cout << "请输入图书编号:";
-    std::getline(std::cin,targetid);
-    book* result;
-    result = findbook(books,targetid);
+    std::getline(std::cin,targetId);
+    Book* result;
+    result = findBook(books,targetId);
     if(result == nullptr)
     {
         std::cout << "没有找到该图书\n";
@@ -122,17 +122,17 @@ void borrowbook(std::vector<book>& books)
     }
 
 }
-void returning(std::vector<book>& books)
+void returnBook(std::vector<Book>& books)
 {
     if(books.empty())
     {
         std::cout << "系统内没有图书\n";
         return;
     }
-    std::string targetid;
+    std::string targetId;
     std::cout << "请输入图书编号:";
-    std::getline(std::cin,targetid);
-    book* result = findbook(books,targetid);
+    std::getline(std::cin,targetId);
+    Book* result = findBook(books,targetId);
     if(result == nullptr)
     {
         std::cout << "未能找到该图书\n";
@@ -140,11 +140,11 @@ void returning(std::vector<book>& books)
     }
     else
     {
-        result -> returnbook();
+        result -> returnBook();
         return;
     }
 }
-void savebook(const std::vector<book>& books)
+void saveBooks(const std::vector<Book>& books)
 {
     std::ofstream output("book.txt");
     if(!output)
@@ -154,48 +154,48 @@ void savebook(const std::vector<book>& books)
     }
     for(const auto& bo:books)
     {
-        output << bo.getid() << '\n';
-        output << bo.gettitle() << '\n';
-        output << bo.getauther() <<'\n';
-        output << static_cast<int>(bo.getstatus()) << '\n';
+        output << bo.getId() << '\n';
+        output << bo.getTitle() << '\n';
+        output << bo.getAuthor() <<'\n';
+        output << static_cast<int>(bo.getStatus()) << '\n';
     }
 }
-void loadbook(std::vector<book>& books)
+void loadBooks(std::vector<Book>& books)
 {
     std::ifstream input("book.txt");
     std::string id;
     std::string title;
-    std::string auther;
-    std::string statustext;
-    borrowstatus status;
+    std::string author;
+    std::string statusText;
+    BorrowStatus status;
     while(getline(input,id))
     {
         if(
             !getline(input,title)||
-            !getline(input,auther)||
-            !getline(input,statustext)
+            !getline(input,author)||
+            !getline(input,statusText)
         )
         {
             std::cout << "图书信息不完整\n";
             return;
         }
-        if(statustext == "0")
+        if(statusText == "0")
         {
-            status = borrowstatus::available;
+            status = BorrowStatus::Available;
         }
-        else if(statustext == "1")
+        else if(statusText == "1")
         {
-            status = borrowstatus::borrowed;
+            status = BorrowStatus::Borrowed;
         }
         else
         {
             std::cout << "借阅状态无效\n";
             continue;
         }
-        books.emplace_back(title,id,auther,status);
+        books.emplace_back(title,id,author,status);
     }
 }
-void sortbookbytitle(std::vector<book>& books)
+void sortBooksByTitle(std::vector<Book>& books)
 {
     if(books.empty())
     {
@@ -205,14 +205,14 @@ void sortbookbytitle(std::vector<book>& books)
     std::sort(
         books.begin(),
         books.end(),
-        [](const book& left,const book& right)
+        [](const Book& left,const Book& right)
         {
-            return left.gettitle() < right.gettitle();
+            return left.getTitle() < right.getTitle();
         }
     );
     std::cout << "已按照书名排序\n";
 }
-void sortbookbyid(std::vector<book>& books)
+void sortBooksById(std::vector<Book>& books)
 {
     if(books.empty())
     {
@@ -222,60 +222,60 @@ void sortbookbyid(std::vector<book>& books)
     std::sort(
         books.begin(),
         books.end(),
-        [](const book& left,const book& right)
+        [](const Book& left,const Book& right)
         {
-            return left.getid() < right.getid();
+            return left.getId() < right.getId();
         }
     );
     std::cout << "已按照图书编号排序\n";
 }
-void countbook(const std::vector<book>& books)
+void countBooks(const std::vector<Book>& books)
 {
-    std::size_t allcount = books.size();
-    auto borrowedcount = std::count_if(
+    std::size_t allCount = books.size();
+    auto borrowedCount = std::count_if(
         books.begin(),
         books.end(),
-        [](const book& bo)
+        [](const Book& bo)
         {
-            return bo.getstatus() == borrowstatus::borrowed;
+            return bo.getStatus() == BorrowStatus::Borrowed;
         }
     );
-    std::size_t availablecount = allcount - borrowedcount;
-    std::cout << "图书总量:" << allcount << '\n';
-    std::cout << "已借出:" << borrowedcount << '\n';
-    std::cout << "未借出:" << availablecount << '\n';
+    std::size_t availableCount = allCount - borrowedCount;
+    std::cout << "图书总量:" << allCount << '\n';
+    std::cout << "已借出:" << borrowedCount << '\n';
+    std::cout << "未借出:" << availableCount << '\n';
 }
-void deletebook(std::vector<book>& books)
+void deleteBook(std::vector<Book>& books)
 {
     if(books.empty())
     {
         std::cout << "系统内没有图书\n";
         return;
     }
-    std::string deleteid;
+    std::string deleteId;
     std::cout << "请输入要删除的图书编号:";
-    std::getline(std::cin,deleteid);
-    auto newend = std::remove_if(
+    std::getline(std::cin,deleteId);
+    auto newEnd = std::remove_if(
         books.begin(),
         books.end(),
-        [deleteid](const book& bo)
+        [deleteId](const Book& bo)
         {
-           return bo.getid() == deleteid;
+           return bo.getId() == deleteId;
         }
     );
-    if(newend == books.end())
+    if(newEnd == books.end())
     {
         std::cout << "没有找到该图书\n";
         return;
     }
-    books.erase(newend,books.end());
+    books.erase(newEnd,books.end());
 }
 int main()
 {
     SetConsoleOutputCP(CP_UTF8);
     SetConsoleCP(CP_UTF8);
-    std::vector<book> books;
-    loadbook(books);
+    std::vector<Book> books;
+    loadBooks(books);
     int choice = -1;
     do
     {
@@ -308,32 +308,32 @@ int main()
         switch(choice)
         {
             case 1:
-                addbook(books);
+                addBook(books);
                 break;
             case 2:
-                showbook(books);
+                showBooks(books);
                 break;
             case 3:
-                searchbook(books);
+                searchBook(books);
                 break;
             case 4:
-                borrowbook(books);
+                borrowBook(books);
                 break;
             case 5:
-                returning(books);
+                returnBook(books);
                 break;
             case 6:
-                sortbookbytitle(books);
+                sortBooksByTitle(books);
                 break;
             case 7:
-                sortbookbyid(books);
+                sortBooksById(books);
                 break;
             case 8:
-                countbook(books);
+                countBooks(books);
                 break;
             case 0:
                 std::cout << "您已成功退出系统\n";
-                savebook(books);
+                saveBooks(books);
                 break;
             default:
                 std::cout << "无效输入\n";
