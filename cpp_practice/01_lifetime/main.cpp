@@ -18,9 +18,9 @@ Tracer::~Tracer()
 }
 int main()
 {
-    Tracer outer {"ouer"};
-    {
-        Tracer inner {"inner"};
-    }
+    Tracer first{"first"};
+    Tracer second{"second"};
+    Tracer third{"third"};
+
     return 0;
 }
