@@ -3,6 +3,7 @@
 #include<chrono>
 #include<fstream>
 #include<vector>
+#include<utility>
 struct TaskInfo
 {
     std::string name;
@@ -24,6 +25,7 @@ class TaskRunner
         std::vector<TaskInfo> tasks;
     public:
         void addTask(const TaskInfo& task);
+        void addTask(TaskInfo&& task);
         void runAll() const;
 };
 TaskSession::TaskSession(const std::string newName)
@@ -53,7 +55,14 @@ TaskSession::~TaskSession()
 }
 void TaskRunner::addTask(const TaskInfo& task)
 {
+    std::cout << "Copy submission\n";
     tasks.push_back(task);
+    return;
+}
+void TaskRunner::addTask(TaskInfo&& task)
+{
+    std::cout << "Move submission\n";
+    tasks.push_back(std::move(task));
     return;
 }
 void runTask(const TaskInfo& task)
@@ -75,7 +84,7 @@ int main()
     TaskInfo First{"hello","Hello from task"};
     TaskInfo Second{"hello","Hello from task"};
     runner.addTask(First);
-    runner.addTask(Second);
+    runner.addTask(std::move(Second));
     runner.runAll();
     return 0;
 }

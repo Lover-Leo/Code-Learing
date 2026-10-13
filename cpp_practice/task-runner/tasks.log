@@ -22,3 +22,11 @@ Start:hello
 End:hello,elapsed:0.2746ms
 Start:hello
 End:hello,elapsed:0.1453ms
+Start:hello
+End:hello,elapsed:0.8474ms
+Start:hello
+End:hello,elapsed:0.5456ms
+Start:hello
+End:hello,elapsed:0.3332ms
+Start:hello
+End:hello,elapsed:0.1591ms
