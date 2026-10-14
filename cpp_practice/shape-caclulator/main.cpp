@@ -2,10 +2,7 @@
 class Shape
 {
     public:
-        virtual double area() const
-        {
-            return 0.0;
-        }
+        virtual double area() const = 0;
         virtual ~Shape() = default;
 };
 class Ractangle : public Shape
@@ -34,5 +31,7 @@ int main()
 {
     Ractangle rectangle{3.0,4.0};
     printArea(rectangle);
+    const Shape& shape = rectangle;
+    printArea(shape);
     return 0;
 }
