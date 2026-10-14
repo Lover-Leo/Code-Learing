@@ -1,4 +1,6 @@
 #include<iostream>
+#include<memory>
+#include<vector>
 class Shape
 {
     public:
@@ -29,9 +31,11 @@ void printArea(const Shape& shape)
 }
 int main()
 {
-    Ractangle rectangle{3.0,4.0};
-    printArea(rectangle);
-    const Shape& shape = rectangle;
-    printArea(shape);
+    auto first = std::make_unique<Ractangle>(3.0,4.0);
+    std::vector<std::unique_ptr<Shape>> shapes;
+    shapes.push_back(std::move(first));
+    std::cout << "first:" << static_cast<bool>(first) << '\n';
+    std::cout << "size:" << shapes.size() << '\n';
+    printArea(*shapes.at(0));
     return 0;
 }
