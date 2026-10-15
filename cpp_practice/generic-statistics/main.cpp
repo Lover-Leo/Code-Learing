@@ -1,6 +1,7 @@
 #include<iostream>
 #include<vector>
 #include<stdexcept>
+#include<numeric>
 template<typename T>
 T sum(const std::vector<T>& numbers)
 {
@@ -12,13 +13,13 @@ T sum(const std::vector<T>& numbers)
     return total;
 }
 template<typename T>
-T average(const std::vector<T>& numbers)
+double average(const std::vector<T>& numbers)
 {
     if(numbers.empty())
     {
         throw std::invalid_argument("Don't be empty\n");
     }
-    double aver = static_cast<double>(sum(numbers))/numbers.size();
+    double aver = std::accumulate(numbers.begin(),numbers.end(),0.0)/numbers.size();
     return aver;
 }
 int main()
@@ -31,6 +32,7 @@ int main()
     {
         std::cout << average(std::vector<int> {2,3}) <<'\n';
         std::cout << average(std::vector<double> {1.5,2.0,3.25}) << '\n';
+        std::cout << average(std::vector<int> {}) << '\n';
     }
     catch(const std::exception& e)
     {
