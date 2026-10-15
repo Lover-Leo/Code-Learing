@@ -56,6 +56,34 @@ int main()
         {
             return value > threshold;
         }
+    ) << '\n';
+    std::vector<double> selected;
+    std::copy_if(
+        values.begin(),values.end(),
+        std::back_inserter(selected),
+        [threshold](double value)
+        {
+            return value > threshold;
+        }
     );
+    std::sort(
+    selected.begin(),
+    selected.end(),
+    [](double a, double b)
+    {
+        return a > b;
+    });
+    for(const auto& se:selected)
+    {
+        std::cout << se << '\n';
+    }
+    if (selected.empty())
+{
+    std::cout << "No matching values\n";
+}
+else
+{
+    std::cout << "Average: " << average(selected) << '\n';
+}
     return 0;
 }
