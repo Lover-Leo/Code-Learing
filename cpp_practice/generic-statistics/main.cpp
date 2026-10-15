@@ -41,12 +41,21 @@ int main()
         std::cout << average(std::vector<int> {2,3}) <<'\n';
         std::cout << average(std::vector<double> {1.5,2.0,3.25}) << '\n';
         std::cout << maximum(std::vector<double> {1.5,2.0,3.25}) << '\n';
-        std::cout << maximum(std::vector<int> {-8,-3,-10});
+        std::cout << maximum(std::vector<int> {-8,-3,-10}) << '\n';
+        std::cout << maximum(std::vector<int> {});
     }
     catch(const std::exception& e)
     {
         std::cerr << e.what() << '\n';
     }
-    
+    std::vector<double> values {1.5,2.0,3.25,4.0};
+    double threshold = 2.0;
+    std::cout << std::count_if(
+        values.begin(),values.end(),
+        [threshold](double value)
+        {
+            return value > threshold;
+        }
+    );
     return 0;
 }
