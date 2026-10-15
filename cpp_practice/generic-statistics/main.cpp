@@ -2,6 +2,7 @@
 #include<vector>
 #include<stdexcept>
 #include<numeric>
+#include<algorithm>
 template<typename T>
 T sum(const std::vector<T>& numbers)
 {
@@ -19,20 +20,28 @@ double average(const std::vector<T>& numbers)
     {
         throw std::invalid_argument("Don't be empty\n");
     }
-    double aver = std::accumulate(numbers.begin(),numbers.end(),0.0)/numbers.size();
+    double aver = std::accumulate(
+        numbers.begin(),numbers.end(),0.0)/numbers.size();
     return aver;
+}
+template<typename T>
+T maximum(const std::vector<T>& numbers)
+{
+     if(numbers.empty())
+    {
+        throw std::invalid_argument("Don't be empty\n");
+    }
+    auto it = std::max_element(numbers.begin(),numbers.end());
+    return (*it);
 }
 int main()
 {
-    std::vector<int> counts{2, 3, 5};
-    std::vector<double> measurements{1.5, 2.0, 3.25};
-    std::cout << sum(counts) << '\n';        // T 推断为 int
-    std::cout << sum(measurements) << '\n';  // T 推断为 double
     try
     {
         std::cout << average(std::vector<int> {2,3}) <<'\n';
         std::cout << average(std::vector<double> {1.5,2.0,3.25}) << '\n';
-        std::cout << average(std::vector<int> {}) << '\n';
+        std::cout << maximum(std::vector<double> {1.5,2.0,3.25}) << '\n';
+        std::cout << maximum(std::vector<int> {-8,-3,-10});
     }
     catch(const std::exception& e)
     {
