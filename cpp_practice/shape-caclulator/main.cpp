@@ -19,7 +19,10 @@ class Ractangle : public Shape
 Ractangle::Ractangle(const double newwidth,const double newheight)
 :width(newwidth),height(newheight)
 {
-
+    if(newwidth <= 0 || newheight <= 0)
+    {
+        throw std::invalid_argument("Width and Height must be positive\n");
+    }
 }
 double Ractangle::area() const
 {
@@ -31,11 +34,25 @@ void printArea(const Shape& shape)
 }
 int main()
 {
-    auto first = std::make_unique<Ractangle>(3.0,4.0);
+    std::vector<double> widths{3.0,-1.0,0.0,5.0};
     std::vector<std::unique_ptr<Shape>> shapes;
-    shapes.push_back(std::move(first));
-    std::cout << "first:" << static_cast<bool>(first) << '\n';
-    std::cout << "size:" << shapes.size() << '\n';
-    printArea(*shapes.at(0));
+    for(const auto& wid:widths)
+    {
+        double height = 4.0;
+        try
+        {
+            shapes.emplace_back(std::make_unique<Ractangle>(wid,height));
+        }
+        catch(const std::invalid_argument& e)
+        {
+            std::cerr << e.what() << '\n';
+        }
+        
+    }
+    std::cout << shapes.size() << '\n';
+    for(const auto& shape:shapes)
+    {
+        printArea(*shape);
+    }
     return 0;
 }
