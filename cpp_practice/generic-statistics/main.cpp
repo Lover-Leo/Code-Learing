@@ -50,6 +50,26 @@ std::vector<T> filter(
     );
     return result;
 }
+template<typename T>
+class Statistics
+{
+    private:
+        std::vector<T> values;
+    public:
+        void add(T value)
+        {
+            values.push_back(value);
+        }
+        double mean() const
+        {
+            return average(values);
+        }
+        template<typename Predicate>
+        std::vector<T> select(Predicate predicate) const
+        {
+            return filter(values,predicate);
+        };
+};
 int main()
 {
     try
@@ -80,6 +100,25 @@ int main()
     return value < 0.0;
 });
     for(const auto& se:selected)
+    {
+        std::cout << se << '\n';
+    }
+    Statistics<int> counts;
+    counts.add(2);
+    counts.add(3);
+    std::cout << counts.mean() << '\n';
+
+    Statistics<double> measurements;
+    measurements.add(1.5);
+    measurements.add(2.0);
+    measurements.add(3.25);
+    std::cout << measurements.mean() << '\n';
+    auto selectedMeasurements = measurements.select(
+    [](double value)
+    {
+        return value > 1.8;
+    });
+    for(const auto& se:selectedMeasurements)
     {
         std::cout << se << '\n';
     }
