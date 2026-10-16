@@ -6,6 +6,8 @@
 #include<iterator>
 #include<optional>
 template<typename T>
+concept Number = std::integral<T> || std::floating_point<T>;
+template<typename T>
 T sum(const std::vector<T>& numbers)
 {
     T total{};
@@ -51,7 +53,7 @@ std::vector<T> filter(
     );
     return result;
 }
-template<typename T>
+template<Number T>
 class Statistics
 {
     private:
