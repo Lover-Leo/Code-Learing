@@ -3,6 +3,7 @@
 #include<stdexcept>
 #include<numeric>
 #include<algorithm>
+#include<iterator>
 template<typename T>
 T sum(const std::vector<T>& numbers)
 {
@@ -34,6 +35,21 @@ T maximum(const std::vector<T>& numbers)
     auto it = std::max_element(numbers.begin(),numbers.end());
     return (*it);
 }
+template<typename T,typename Predicate>
+std::vector<T> filter(
+    const std::vector<T>& values,
+    Predicate predicate
+)
+{
+    std::vector<T> result;
+    std::copy_if(
+        values.begin(),
+        values.end(),
+        std::back_inserter(result),
+        predicate
+    );
+    return result;
+}
 int main()
 {
     try
@@ -50,40 +66,22 @@ int main()
     }
     std::vector<double> values {1.5,2.0,3.25,4.0};
     double threshold = 2.0;
-    std::cout << std::count_if(
-        values.begin(),values.end(),
-        [threshold](double value)
-        {
-            return value > threshold;
-        }
-    ) << '\n';
-    std::vector<double> selected;
-    std::copy_if(
-        values.begin(),values.end(),
-        std::back_inserter(selected),
-        [threshold](double value)
-        {
-            return value > threshold;
-        }
-    );
-    std::sort(
-    selected.begin(),
-    selected.end(),
-    [](double a, double b)
-    {
-        return a > b;
-    });
+    std::vector <double> selected;
+    selected = filter(values,[threshold](double value)
+{
+    return value > threshold;
+});
     for(const auto& se:selected)
     {
         std::cout << se << '\n';
     }
-    if (selected.empty())
+    selected = filter(values,[](double value)
 {
-    std::cout << "No matching values\n";
-}
-else
-{
-    std::cout << "Average: " << average(selected) << '\n';
-}
+    return value < 0.0;
+});
+    for(const auto& se:selected)
+    {
+        std::cout << se << '\n';
+    }
     return 0;
 }
