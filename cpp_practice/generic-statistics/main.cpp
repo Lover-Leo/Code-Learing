@@ -4,6 +4,7 @@
 #include<numeric>
 #include<algorithm>
 #include<iterator>
+#include<optional>
 template<typename T>
 T sum(const std::vector<T>& numbers)
 {
@@ -69,6 +70,15 @@ class Statistics
         {
             return filter(values,predicate);
         };
+        std::optional<double> tryMean() const
+        {
+            if (values.empty())
+            {
+                return std::nullopt;
+            }
+
+            return average(values);
+        }
 };
 int main()
 {
@@ -122,5 +132,22 @@ int main()
     {
         std::cout << se << '\n';
     }
+    auto result = measurements.tryMean();
+    if (result.has_value())
+    {
+        std::cout << *result << '\n';
+    }
+    else
+    {
+        std::cout << "No data\n";
+    }
+    Statistics<double> emptyStats;
+    result = emptyStats.tryMean();
+    if(result.has_value())
+    {
+        std::cout << *result << '\n';
+    }
+    else
+        std::cout << "No data\n";
     return 0;
 }
