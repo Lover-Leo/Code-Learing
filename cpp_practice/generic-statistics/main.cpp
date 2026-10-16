@@ -81,6 +81,16 @@ class Statistics
 
             return average(values);
         }
+        template<typename Operation>
+        std::vector<T> transformed(Operation operation) const
+        {
+            std::vector<T> result;
+            std::transform(
+                values.begin(),values.end(),
+                std::back_inserter(result),
+                operation);
+            return result;
+        }
 };
 int main()
 {
@@ -151,5 +161,13 @@ int main()
     }
     else
         std::cout << "No data\n";
+    auto doubled = measurements.transformed([](double value)
+    {
+        return value * 2.0;
+    });
+    for(const auto& dou:doubled)
+    {
+        std::cout << dou << '\n';
+    }
     return 0;
 }
