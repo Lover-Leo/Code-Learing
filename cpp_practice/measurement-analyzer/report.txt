@@ -1,0 +1,2 @@
+sensorA:count:2,mean:25
+sensorD:count:2,mean:5

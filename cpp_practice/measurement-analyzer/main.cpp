@@ -34,6 +34,20 @@ PraseResult PraseMeasurement(const std::string& line)
         return record;
     }
 }
+void writeReport(
+    std::ostream& output,
+    const std::map<std::string,std::vector<double>>& groups)
+{
+    for(const auto& [name,value]:groups)
+    {
+        double total = std::accumulate(
+            value.begin(),value.end(),0.0);
+        double mean = total/value.size();
+        output << name << ':' << "count:"
+            << value.size() << ','
+            << "mean:" << mean << '\n';
+    }
+}
 int main()
 {
     std::ifstream file("measurements.txt");
@@ -51,8 +65,6 @@ int main()
         auto result = PraseMeasurement(line);
         if(auto* record = std::get_if<Measurement>(&result))
         {
-            std::cout << record->name << ':' << record->value << '\n';
-            records.push_back(*record);
             groups[record->name].push_back(record->value);
         }
         else
@@ -61,14 +73,12 @@ int main()
                 << std::get<std::string>(result);
         }
     }
-    for(const auto& [name,value]:groups)
+    writeReport(std::cout,groups);
+    std::ofstream report("report.txt");
+    if(!report)
     {
-        double total = std::accumulate(
-            value.begin(),value.end(),0.0);
-        double mean = total/value.size();
-        std::cout << name << ':' << "count:"
-            << value.size() << ','
-            << "mean:" << mean << '\n';
+        std::cerr << "Failed to open the file.\n";
     }
+    writeReport(report,groups);
     return 0;
 }
