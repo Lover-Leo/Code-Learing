@@ -80,5 +80,14 @@ int main()
         std::cerr << "Failed to open the file.\n";
     }
     writeReport(report,groups);
+    std::map<std::string, std::vector<double>> testGroups
+    {
+        {"sensorA", {20.0, 30.0}}
+    };
+    std::ostringstream output;
+    writeReport(output,testGroups);
+    std::cout << std::boolalpha
+          << (output.str() == "sensorA:count:2,mean:25\n")
+          << '\n';
     return 0;
 }
