@@ -1,0 +1,4 @@
+sensorA 23.5
+sensorB wrong
+sensorC 18.0 extra
+sensorD 0
