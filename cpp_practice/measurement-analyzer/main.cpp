@@ -6,12 +6,22 @@
 #include<vector>
 #include<map>
 #include<numeric>
+enum class PraseErrorCode
+{
+    InvalidRecord,
+    ExtraField
+};
+struct PraseError
+{
+    PraseErrorCode code;
+    std::string message;
+};
 struct Measurement
 {
     std::string name;
     double value;
 };
-using PraseResult = std::variant<Measurement,std::string>;
+using PraseResult = std::variant<Measurement,PraseError>;
 PraseResult PraseMeasurement(const std::string& line)
 {
     std::istringstream input(line);
@@ -21,11 +31,13 @@ PraseResult PraseMeasurement(const std::string& line)
     Measurement record;
     if(!(input >> name >> value))
     {
-        return "Failed to read.\n";
+        return PraseError{PraseErrorCode::InvalidRecord,
+            "Failed to open the file.\n"};
     }
     if(input >> extra)
     {
-        return "There is extra data.\n";
+        return PraseError{PraseErrorCode::ExtraField,
+            "There is extra data.\n"};
     }
     else
     {
@@ -59,6 +71,8 @@ int main()
     std::string line;
     int lineNumber = 0;
     std::map<std::string,std::vector<double>> groups;
+    int invalidcount = 0;
+    int extracount = 0;
     while(std::getline(file,line))
     {
         ++lineNumber;
@@ -69,8 +83,22 @@ int main()
         }
         else
         {
+            const auto& error = std::get<PraseError>(result);
             std::cerr << "line:" << lineNumber << ':'
-                << std::get<std::string>(result);
+                << error.message;
+            switch(error.code)
+            {
+                case PraseErrorCode::ExtraField:
+                {
+                    extracount += 1;
+                    break;
+                }
+                case PraseErrorCode::InvalidRecord:
+                {
+                    invalidcount += 1;
+                    break;
+                }
+            }
         }
     }
     writeReport(std::cout,groups);
@@ -89,5 +117,7 @@ int main()
     std::cout << std::boolalpha
           << (output.str() == "sensorA:count:2,mean:25\n")
           << '\n';
+    std::cout << "Invalid records: " << invalidcount << '\n';
+    std::cout << "Extra fields: " << extracount << '\n';
     return 0;
 }
