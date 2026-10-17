@@ -21,6 +21,12 @@ struct Measurement
     std::string name;
     double value;
 };
+struct AnalysisResult
+{
+    std::map<std::string, std::vector<double>> groups;
+    int invalidCount{};
+    int extraCount{};
+};
 using PraseResult = std::variant<Measurement,PraseError>;
 PraseResult PraseMeasurement(const std::string& line)
 {
@@ -32,7 +38,7 @@ PraseResult PraseMeasurement(const std::string& line)
     if(!(input >> name >> value))
     {
         return PraseError{PraseErrorCode::InvalidRecord,
-            "Failed to open the file.\n"};
+            "Failed to read the file.\n"};
     }
     if(input >> extra)
     {
@@ -60,6 +66,38 @@ void writeReport(
             << "mean:" << mean << '\n';
     }
 }
+AnalysisResult analyze(std::istream& input)
+{
+    AnalysisResult analysis;
+    std::string line;
+
+    while (std::getline(input, line))
+    {
+        auto result = PraseMeasurement(line);
+        if(auto* record = std::get_if<Measurement>(&result))
+        {
+            analysis.groups[record->name].push_back(record->value);
+        }
+        else
+        {
+            const auto& error = std::get<PraseError>(result);
+            switch(error.code)
+            {
+                case PraseErrorCode::ExtraField:
+                {
+                    analysis.extraCount += 1;
+                    break;
+                }
+                case PraseErrorCode::InvalidRecord:
+                {
+                    analysis.invalidCount += 1;
+                    break;
+                }
+            }
+        }
+    }
+    return analysis;
+}
 int main()
 {
     std::ifstream file("measurements.txt");
@@ -68,46 +106,14 @@ int main()
         std::cerr << "Failed to open.\n";
         return 1;
     }
-    std::string line;
-    int lineNumber = 0;
-    std::map<std::string,std::vector<double>> groups;
-    int invalidcount = 0;
-    int extracount = 0;
-    while(std::getline(file,line))
-    {
-        ++lineNumber;
-        auto result = PraseMeasurement(line);
-        if(auto* record = std::get_if<Measurement>(&result))
-        {
-            groups[record->name].push_back(record->value);
-        }
-        else
-        {
-            const auto& error = std::get<PraseError>(result);
-            std::cerr << "line:" << lineNumber << ':'
-                << error.message;
-            switch(error.code)
-            {
-                case PraseErrorCode::ExtraField:
-                {
-                    extracount += 1;
-                    break;
-                }
-                case PraseErrorCode::InvalidRecord:
-                {
-                    invalidcount += 1;
-                    break;
-                }
-            }
-        }
-    }
-    writeReport(std::cout,groups);
+    AnalysisResult analysis = analyze(file);
+    writeReport(std::cout,analysis.groups);
     std::ofstream report("report.txt");
     if(!report)
     {
         std::cerr << "Failed to open the file.\n";
     }
-    writeReport(report,groups);
+    writeReport(report,analysis.groups);
     std::map<std::string, std::vector<double>> testGroups
     {
         {"sensorA", {20.0, 30.0}}
@@ -117,7 +123,7 @@ int main()
     std::cout << std::boolalpha
           << (output.str() == "sensorA:count:2,mean:25\n")
           << '\n';
-    std::cout << "Invalid records: " << invalidcount << '\n';
-    std::cout << "Extra fields: " << extracount << '\n';
+    std::cout << "Invalid records: " << analysis.invalidCount << '\n';
+    std::cout << "Extra fields: " << analysis.extraCount << '\n';
     return 0;
 }
