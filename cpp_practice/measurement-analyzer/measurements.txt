@@ -2,3 +2,5 @@ sensorA 23.5
 sensorB wrong
 sensorC 18.0 extra
 sensorD 0
+sensorA 26.5
+sensorD 10
