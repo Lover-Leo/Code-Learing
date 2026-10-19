@@ -21,11 +21,17 @@ struct Measurement
     std::string name;
     double value;
 };
+struct Diagnostic
+{
+    int lineNumber;
+    PraseError error;
+};
 struct AnalysisResult
 {
     std::map<std::string, std::vector<double>> groups;
     int invalidCount{};
     int extraCount{};
+    std::vector<Diagnostic> diagnostic;
 };
 using PraseResult = std::variant<Measurement,PraseError>;
 PraseResult PraseMeasurement(const std::string& line)
@@ -38,12 +44,12 @@ PraseResult PraseMeasurement(const std::string& line)
     if(!(input >> name >> value))
     {
         return PraseError{PraseErrorCode::InvalidRecord,
-            "Failed to read the file.\n"};
+            "Failed to read the file."};
     }
     if(input >> extra)
     {
         return PraseError{PraseErrorCode::ExtraField,
-            "There is extra data.\n"};
+            "There is extra data."};
     }
     else
     {
@@ -70,9 +76,10 @@ AnalysisResult analyze(std::istream& input)
 {
     AnalysisResult analysis;
     std::string line;
-
+    int lineNumber = 0;
     while (std::getline(input, line))
     {
+        lineNumber++;
         auto result = PraseMeasurement(line);
         if(auto* record = std::get_if<Measurement>(&result))
         {
@@ -94,6 +101,9 @@ AnalysisResult analyze(std::istream& input)
                     break;
                 }
             }
+            analysis.diagnostic.push_back(
+                Diagnostic{lineNumber,error}
+            );
         }
     }
     return analysis;
@@ -107,6 +117,11 @@ int main()
         return 1;
     }
     AnalysisResult analysis = analyze(file);
+    for(const auto& Diag:analysis.diagnostic)
+    {
+        std::cerr << "Line" << Diag.lineNumber
+            << ':' << Diag.error.message << '\n';
+    }
     writeReport(std::cout,analysis.groups);
     std::ofstream report("report.txt");
     if(!report)
@@ -114,6 +129,8 @@ int main()
         std::cerr << "Failed to open the file.\n";
     }
     writeReport(report,analysis.groups);
+
+    //测试部分1
     std::map<std::string, std::vector<double>> testGroups
     {
         {"sensorA", {20.0, 30.0}}
@@ -144,5 +161,17 @@ int main()
 
     std::cout << std::boolalpha
             << "Analyze test: " << passed << '\n';
+
+    //测试部分2
+    std::istringstream emptyInput("");
+    auto emptyResult = analyze(emptyInput);
+
+    bool emptyPassed = emptyResult.groups.empty()
+                    && emptyResult.diagnostic.empty()
+                    && emptyResult.invalidCount == 0
+                    && emptyResult.extraCount == 0;
+
+    std::cout << std::boolalpha
+            << "Empty input test: " << emptyPassed << '\n';
     return 0;
 }
