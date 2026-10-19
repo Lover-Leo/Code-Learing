@@ -125,5 +125,24 @@ int main()
           << '\n';
     std::cout << "Invalid records: " << analysis.invalidCount << '\n';
     std::cout << "Extra fields: " << analysis.extraCount << '\n';
+    std::istringstream testInput(
+        "sensorA 20\n"
+        "sensorB wrong\n"
+        "sensorC 18 extra\n"
+        "sensorA 30\n"
+    );
+
+    auto tested = analyze(testInput);
+
+    std::map<std::string, std::vector<double>> expectedGroups{
+        {"sensorA", {20.0, 30.0}}
+    };
+
+    bool passed = tested.groups == expectedGroups
+            && tested.invalidCount == 1
+            && tested.extraCount == 1;
+
+    std::cout << std::boolalpha
+            << "Analyze test: " << passed << '\n';
     return 0;
 }
