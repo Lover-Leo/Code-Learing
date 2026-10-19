@@ -6,6 +6,7 @@
 #include<vector>
 #include<map>
 #include<numeric>
+#include<stdexcept>
 enum class PraseErrorCode
 {
     InvalidRecord,
@@ -106,6 +107,10 @@ AnalysisResult analyze(std::istream& input)
             );
         }
     }
+    if(input.bad() || (!(input.eof()) && input.fail()))
+    {
+        throw std::runtime_error("Failed to read the input.");
+    }
     return analysis;
 }
 int main()
@@ -116,7 +121,16 @@ int main()
         std::cerr << "Failed to open.\n";
         return 1;
     }
-    AnalysisResult analysis = analyze(file);
+    AnalysisResult analysis;
+    try
+    {
+        analysis = analyze(file);
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+        return 1;
+    }
     for(const auto& Diag:analysis.diagnostic)
     {
         std::cerr << "Line" << Diag.lineNumber
@@ -179,5 +193,23 @@ int main()
 
     std::cout << std::boolalpha
             << "Empty input test: " << emptyPassed << '\n';
+
+    //测试部分3
+    std::istringstream brokenInput("sensorA 20\n");
+    brokenInput.setstate(std::ios::badbit);
+
+    bool caught = false;
+
+    try
+    {
+        analyze(brokenInput);
+    }
+    catch (const std::runtime_error&)
+    {
+        caught = true;
+    }
+
+    std::cout << std::boolalpha
+            << "Read failure test: " << caught << '\n';
     return 0;
 }
