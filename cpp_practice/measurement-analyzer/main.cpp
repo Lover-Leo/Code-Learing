@@ -129,6 +129,12 @@ int main()
         std::cerr << "Failed to open the file.\n";
     }
     writeReport(report,analysis.groups);
+    report.close();
+    if (!report)
+    {
+        std::cerr << "Failed to write or close report file\n";
+        return 1;
+    }
 
     //测试部分1
     std::map<std::string, std::vector<double>> testGroups
