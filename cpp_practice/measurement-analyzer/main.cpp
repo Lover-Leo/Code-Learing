@@ -144,9 +144,11 @@ int main()
     }
     writeReport(report,analysis.groups);
     report.close();
+    bool reportpassed = true;
     if (!report)
     {
         std::cerr << "Failed to write or close report file\n";
+        reportpassed = false;
         return 1;
     }
 
@@ -211,5 +213,8 @@ int main()
 
     std::cout << std::boolalpha
             << "Read failure test: " << caught << '\n';
-    return 0;
+
+
+    bool allPassed = passed && emptyPassed && caught && reportpassed;
+    return allPassed ? 0 : 1;
 }
