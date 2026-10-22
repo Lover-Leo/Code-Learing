@@ -6,7 +6,6 @@
 *.ilk
 *.lib
 *.dll
-*.json
 
 # Build directories
 build/
@@ -20,3 +19,20 @@ out/
 *.tmp
 *.bak
 *~
+
+# macOS / Clang debug products
+*.dSYM/
+*.a
+*.so
+*.dylib
+.DS_Store
+
+# Executables from the current single-file C++ exercises
+/cpp_practice/**/main
+/Book Manager/bookManager
+
+# Local runtime logs
+*.log
+
+# Local editor configuration (keep shared scripts)
+/.vscode/*.json
