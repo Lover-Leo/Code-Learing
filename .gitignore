@@ -36,3 +36,7 @@ out/
 
 # Local editor configuration (keep shared scripts)
 /.vscode/*.json
+!/.vscode/tasks.json
+!/.vscode/launch.json
+!/.vscode/settings.json
+!/.vscode/c_cpp_properties.json

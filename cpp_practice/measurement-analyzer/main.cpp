@@ -141,27 +141,28 @@ int main()
     if(!report)
     {
         std::cerr << "Failed to open the file.\n";
+        return 1;
     }
     writeReport(report,analysis.groups);
     report.close();
-    bool reportpassed = true;
     if (!report)
     {
         std::cerr << "Failed to write or close report file\n";
-        reportpassed = false;
         return 1;
     }
-
-    //测试部分1
     std::map<std::string, std::vector<double>> testGroups
     {
         {"sensorA", {20.0, 30.0}}
     };
     std::ostringstream output;
     writeReport(output,testGroups);
+    bool reportPassed =                  // 最后检查报告内容
+        (output.str() == "sensorA:count:2,mean:25\n");
+
     std::cout << std::boolalpha
-          << (output.str() == "sensorA:count:2,mean:25\n")
-          << '\n';
+            << "Report test: " << reportPassed << '\n';
+
+    //测试部分1
     std::cout << "Invalid records: " << analysis.invalidCount << '\n';
     std::cout << "Extra fields: " << analysis.extraCount << '\n';
     std::istringstream testInput(
@@ -215,6 +216,6 @@ int main()
             << "Read failure test: " << caught << '\n';
 
 
-    bool allPassed = passed && emptyPassed && caught && reportpassed;
+    bool allPassed = passed && emptyPassed && caught && reportPassed;
     return allPassed ? 0 : 1;
 }
