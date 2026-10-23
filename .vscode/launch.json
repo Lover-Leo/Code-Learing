@@ -1,0 +1,25 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Mac: C++20 build and debug active file",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${fileDirname}/${fileBasenameNoExtension}",
+            "cwd": "${fileDirname}",
+            "preLaunchTask": "C++20: build active file",
+            "terminal": "integrated",
+            "stopOnEntry": false
+        },
+        {
+            "name": "Windows: C++20 build and debug active file",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
+            "cwd": "${fileDirname}",
+            "preLaunchTask": "C++20: build active file",
+            "console": "integratedTerminal",
+            "stopAtEntry": false
+        }
+    ]
+}

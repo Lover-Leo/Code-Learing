@@ -1,0 +1,58 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "C++20: build active file",
+            "type": "process",
+            "command": "/usr/bin/clang++",
+            "args": [
+                "-std=c++20",
+                "-g",
+                "-O0",
+                "-Wall",
+                "-Wextra",
+                "-pedantic",
+                "${file}",
+                "-o",
+                "${fileDirname}/${fileBasenameNoExtension}"
+            ],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "windows": {
+                "type": "shell",
+                "command": "call",
+                "args": [
+                    {
+                        "value": "${workspaceFolder}\\.vscode\\build-msvc.cmd",
+                        "quoting": "strong"
+                    },
+                    {
+                        "value": "${file}",
+                        "quoting": "strong"
+                    }
+                ],
+                "options": {
+                    "cwd": "${fileDirname}",
+                    "shell": {
+                        "executable": "${env:ComSpec}",
+                        "args": [
+                            "/d",
+                            "/c"
+                        ]
+                    }
+                },
+                "problemMatcher": [
+                    "$msCompile"
+                ]
+            }
+        }
+    ]
+}

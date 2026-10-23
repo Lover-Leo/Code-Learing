@@ -1,0 +1,8 @@
+{
+    "C_Cpp.default.cStandard": "c17",
+    "C_Cpp.default.cppStandard": "c++20",
+    "lldb.adapterEnv": {
+        "LLDB_DEBUGSERVER_PATH": "/Library/Developer/CommandLineTools/Library/PrivateFrameworks/LLDB.framework/Resources/debugserver"
+    },
+    "editor.inlineSuggest.enabled": false
+}
