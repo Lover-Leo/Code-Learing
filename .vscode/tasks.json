@@ -3,7 +3,7 @@
     "tasks": [
         {
             "label": "C++20: build active file",
-            "type": "process",
+            "type": "shell",
             "command": "/usr/bin/clang++",
             "args": [
                 "-std=c++20",
@@ -27,7 +27,6 @@
                 "isDefault": true
             },
             "windows": {
-                "type": "shell",
                 "command": "call",
                 "args": [
                     {
