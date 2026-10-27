@@ -95,9 +95,11 @@ public:
                     while (l < r && nums[r] == nums[r + 1]) {
                         r--;
                     }
-                } else if (sum < target) {
+                } 
+                else if (sum < target) {
                     l++;  // 和偏小，尝试更大的数
-                } else {
+                } 
+                else {
                     r--;  // 和偏大，尝试更小的数
                 }
             }
