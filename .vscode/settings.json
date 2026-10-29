@@ -4,5 +4,8 @@
     "lldb.adapterEnv": {
         "LLDB_DEBUGSERVER_PATH": "/Library/Developer/CommandLineTools/Library/PrivateFrameworks/LLDB.framework/Resources/debugserver"
     },
-    "editor.inlineSuggest.enabled": false
+    "editor.inlineSuggest.enabled": false,
+    "python-envs.defaultEnvManager": "ms-python.python:system",
+    "python.defaultInterpreterPath": "${userHome}/.local/share/venvs/python-default",
+    "python.terminal.executeInFileDir": true
 }
