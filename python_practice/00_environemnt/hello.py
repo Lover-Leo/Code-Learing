@@ -1,1 +1,2 @@
-print("Hellow World\n")
+print("Hellow World")
+print("Today start to learn python")
