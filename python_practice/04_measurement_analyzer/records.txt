@@ -3,3 +3,6 @@ temperature 24.0
 humidity 60
 temperature abc
 humidity 65
+temperature inf
+temperature nan
+humidity 0

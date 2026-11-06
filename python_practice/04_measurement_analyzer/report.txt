@@ -1,2 +1,2 @@
 temperature:长度2平均值23.75
-humidity:长度2平均值62.50
+humidity:长度3平均值41.67
