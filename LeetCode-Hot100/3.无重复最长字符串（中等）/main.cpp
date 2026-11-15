@@ -11,10 +11,27 @@ using namespace std;
 class Solution {
 public:
     int lengthOfLongestSubstring(string s) {
-        stack<int> mp;
-        for(const auto& ch: s)
-        {
-            
+        int n = static_cast<int>(s.size());
+        int left = 0;
+        int max_num = 0;
+
+        for (int right = 0; right < n; right++) {
+            for (int i = left; i < right; i++) {
+                if (s[i] == s[right]) {
+                    left = i + 1;  // 跳过旧的重复字符
+                    break;
+                }
+            }
+
+            // 此时窗口包含 left 和 right 两端
+            max_num = std::max(max_num, right - left + 1);
         }
+
+        return max_num;
     }
 };
+
+// a  b  c  a  b  a
+//          r
+//    l
+// i

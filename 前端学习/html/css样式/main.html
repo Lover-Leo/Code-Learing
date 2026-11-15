@@ -1,0 +1,30 @@
+<header>
+    <meta charset="UTF-8">
+    <title>样式学习</title>
+    <style>
+        .c1{
+            display: inline-block;
+            color: red;
+            height: 59px;
+            width: 50px;
+            border: 1px solid red;
+            text-align: center; /*水平居中*/
+            line-height: 59px; /*竖直居中*/
+        }
+        .item{
+            height: 100px;
+            width: 60px;
+            border: 1px solid blue;
+            float: left;
+        }
+    </style>
+</header>
+<body>
+    <div class="c1">hello</div>
+    <div>
+        <div class="item"></div>
+        <div class="item"></div>
+        <div class="item"></div> /*脱离文档流*/
+        <div style="clear: both;"></div>/*拽回来*/
+    </div>
+</body>
