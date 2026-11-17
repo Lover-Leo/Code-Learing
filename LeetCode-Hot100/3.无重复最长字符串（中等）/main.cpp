@@ -30,8 +30,3 @@ public:
         return max_num;
     }
 };
-
-// a  b  c  a  b  a
-//          r
-//    l
-// i
